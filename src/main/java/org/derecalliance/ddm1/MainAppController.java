@@ -1,12 +1,11 @@
 package org.derecalliance.ddm1;
 
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.derecalliance.ddm1.state.State;
 
 public class MainAppController {
 
@@ -23,18 +22,18 @@ public class MainAppController {
 //        this.tabPane.setPrefHeight(500);
         this.tabPane.setPrefSize(primaryStage.getScene().getWidth(),
                 primaryStage.getScene().getHeight());
-        this.tabPane.setStyle("-fx-background-color: #00ff00");
+        this.tabPane.setStyle("-fx-background-color: " + State.getInstance().getColor("background"));
 
         initializeTabs();
     }
 
     private void initializeTabs() {
         // Create and add "Sharer" tab
-        Tab sharerTab = new SharerTab(primaryStage);
+        Tab sharerTab = new SharerMainTab(primaryStage);
         tabPane.getTabs().add(sharerTab);
 
         // Create and add "Helper" tab
-        Tab helperTab = new HelperTab();
+        Tab helperTab = new HelperMainTab();
         tabPane.getTabs().add(helperTab);
     }
 

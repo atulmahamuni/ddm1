@@ -1,4 +1,4 @@
-package org.derecalliance.ddm1;
+package org.derecalliance.ddm1.state;
 
 public class Helper {
     public String getName() {

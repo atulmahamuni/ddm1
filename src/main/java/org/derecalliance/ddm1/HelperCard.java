@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
+import org.derecalliance.ddm1.state.Helper;
 
 
 public class HelperCard extends VBox {

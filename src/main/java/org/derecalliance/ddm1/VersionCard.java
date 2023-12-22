@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import org.derecalliance.ddm1.state.Version;
 
 public class VersionCard extends VBox {
 

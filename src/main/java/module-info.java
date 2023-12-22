@@ -8,4 +8,6 @@ module org.derecalliance.ddm1 {
 
     opens org.derecalliance.ddm1 to javafx.fxml;
     exports org.derecalliance.ddm1;
+    exports org.derecalliance.ddm1.state;
+    opens org.derecalliance.ddm1.state to javafx.fxml;
 }
