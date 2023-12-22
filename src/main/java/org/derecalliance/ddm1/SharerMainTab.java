@@ -31,7 +31,7 @@ public class SharerMainTab extends Tab {
 
 
         this.setText("Sharer");
-        Label l = new Label("hi");
+//        Label l = new Label("hi");
 
         StackPane stackPane = new StackPane();
 //        stackPane.setStyle("-fx-background-color: #e0e0e0");
@@ -51,10 +51,10 @@ public class SharerMainTab extends Tab {
             Label noSecretsLabel = new Label("You have no secrets");
             topRow.getChildren().add(noSecretsLabel);
         } else {
+            Label secretLabel = new Label("Secret: ");
             secretDropdown.setPromptText("Select a Secret");
-            topRow.getChildren().add(secretDropdown);
+            topRow.getChildren().addAll(secretLabel, secretDropdown);
         }
-
 
         // Create a middle pane with a label
         Pane middlePane = createMiddlePane();
