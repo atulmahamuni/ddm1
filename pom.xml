@@ -14,6 +14,14 @@
         <junit.version>5.9.2</junit.version>
     </properties>
 
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>jitpack.io</id>-->
+<!--            <url>https://jitpack.io</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+
+
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -58,6 +66,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.jorabin</groupId>-->
+<!--            <artifactId>keypr-protoype</artifactId>-->
+<!--&lt;!&ndash;            <version>b093438612a081bd90a37145887229a4da56bdcc</version>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>b093438</version>&ndash;&gt;-->
+<!--            <version>main-SNAPSHOT</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

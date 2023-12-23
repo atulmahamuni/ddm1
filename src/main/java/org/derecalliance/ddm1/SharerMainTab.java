@@ -116,7 +116,7 @@ public class SharerMainTab extends Tab {
 
     private Pane createMiddlePane() {
         Pane middlePane = new StackPane();
-        middlePane.setStyle("-fx-background-color: #ff00000;"); // Background
+//        middlePane.setStyle("-fx-background-color: #ff00000;"); // Background
         return middlePane;
     }
 
