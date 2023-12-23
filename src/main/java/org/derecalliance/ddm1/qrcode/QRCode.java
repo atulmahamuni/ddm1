@@ -1,8 +1,9 @@
 package org.derecalliance.ddm1.qrcode;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.*;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -23,7 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import javafx.scene.image.ImageView;
-//import java.awt.Color;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import java.awt.image.RescaleOp;
+import java.awt.geom.AffineTransform;
+
 
 
 import javax.imageio.ImageIO;
@@ -40,6 +44,12 @@ public class QRCode {
     private Scene scene;
 
 
+    /*
+     * ------------------------------------------------------------------------
+     * QR code reading
+     * ------------------------------------------------------------------------
+     */
+    // Show the pane that can read/capture the QR code image
     public void createHelperPane(Pane currentPane) {
         int[] rectDimensions = {250, 250};
         int[] sceneDimensions = {rectDimensions[0] + 50,
@@ -66,6 +76,7 @@ public class QRCode {
         initStage.show();
     }
 
+    // Capture the image
     private void capture(Pane helperPane, Rectangle transparentArea) {
         try {
             // Calculate the bounds of the transparent area in screen coordinates
@@ -79,14 +90,66 @@ public class QRCode {
 //            Rectangle2D captureRect = new Rectangle2D(0, 0, 500, 500);
             WritableImage screenshot = robot.getScreenCapture(null, captureRect);
 
+            String result = decodeQRCode(screenshot);
+            System.out.println("SCANNED RESULT: " + result);
             // Save the image
-            File file = new File("captured_image.png");
-            ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", file);
+//            File file = new File("captured_image.png");
+//            ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", file);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+    public BufferedImage simpleTransform(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
 
+        BufferedImage correctedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = correctedImage.createGraphics();
+
+        // Example: Simple scaling and rotation
+        AffineTransform transform = new AffineTransform();
+        transform.scale(1.0, 1.0); // Scale
+        transform.rotate(Math.toRadians(0), width / 2.0, height / 2.0); // Rotate
+
+        g2d.transform(transform);
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+
+        return correctedImage;
+    }
+
+    public String decodeQRCode(WritableImage writableImage) {
+        try {
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+
+//            float scaleFactor = 2.0f; // Adjust this value as needed
+//            RescaleOp op = new RescaleOp(scaleFactor, 0, null);
+//            bufferedImage = op.filter(bufferedImage, null);
+            bufferedImage = simpleTransform(bufferedImage);
+
+            LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+//            File file = new File("captured_image2.png");
+//            ImageIO.write(bufferedImage, "png", file);
+
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (Exception e) {
+            System.out.println("Exception in decodeQRCode");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /*
+     * ------------------------------------------------------------------------
+     * QR code generation
+     * ------------------------------------------------------------------------
+     */
+
+    // Geenerate QR Code and return the stackpane with that QR code
     public StackPane createQR(String data,
                                 String charset,
                                 int height, int width) {
@@ -95,12 +158,6 @@ public class QRCode {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(
                     new String(data.getBytes(charset), charset),
                     BarcodeFormat.QR_CODE, width, height);
-
-
-//        MatrixToImageWriter.writeToFile(
-//                matrix,
-//                path.substring(path.lastIndexOf('.') + 1),
-//                new File(path));
 
             // Convert BitMatrix to BufferedImage
             BufferedImage bufferedImage = toBufferedImage(bitMatrix);
@@ -112,12 +169,6 @@ public class QRCode {
             ImageView imageView = new ImageView(writableImage);
 
             StackPane root = new StackPane(imageView);
-
-//            Scene scene = new Scene(root, bufferedImage.getWidth(), bufferedImage.getHeight());
-//
-//            primaryStage.setTitle("BitMatrix Display");
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
             return root;
         } catch (Exception e) {
             System.out.println("Exception in createQR");
@@ -125,6 +176,7 @@ public class QRCode {
         return null;
     }
 
+    // Utility functions
     private BufferedImage toBufferedImage(BitMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
@@ -139,6 +191,7 @@ public class QRCode {
         return image;
     }
 
+    // Utility functions
     private WritableImage fromBufferedImage(BufferedImage bufferedImage) {
         WritableImage writableImage = null;
         if (bufferedImage != null) {
@@ -147,6 +200,7 @@ public class QRCode {
         }
         return writableImage;
     }
+
 
 
 //    public void showCaptureImageDialog(Pane currentPane) {

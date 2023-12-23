@@ -16,9 +16,6 @@ public class HelperMainTab extends Tab {
     public HelperMainTab() {
         this.setText("Helper");
 
-//        Button plusButton = new Button("+");
-//        plusButton.setOnAction(e -> createNewSharer(middlePane));
-//        topRow.getChildren().add(plusButton);
 
         StackPane stackPane = new StackPane();
         BorderPane helperContent = new BorderPane();
@@ -38,12 +35,10 @@ public class HelperMainTab extends Tab {
         bottomRow.getChildren().add(plusButton);
 
 
-        // Set the top row at the top of the BorderPane
         helperContent.setTop(topRow);
         helperContent.setCenter(middlePane);
         helperContent.setBottom(bottomRow);
 
-//        pane.getChildren().add(sharerContent);
         stackPane.getChildren().add(helperContent);
         this.setContent(stackPane);
     }
