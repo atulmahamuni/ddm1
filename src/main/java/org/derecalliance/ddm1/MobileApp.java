@@ -28,9 +28,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.derecalliance.ddm1.state.State;
+
+import javax.swing.event.ChangeListener;
+import java.net.URI;
+import java.util.Map;
 
 public class MobileApp extends Application {
 
+    Map<String,String> testNames = Map.of(
+            "a","http://localhost:8001",
+            "b","http://localhost:8002",
+            "c","http://localhost:8003",
+            "d","http://localhost:8004",
+            "e","http://localhost:8005");
     public static void main(String[] args) {
         launch(args);
     }
@@ -59,23 +70,30 @@ public class MobileApp extends Application {
         Label nameLabel = new Label("Name:");
         TextField nameField = new TextField();
 
-        Label phoneLabel = new Label("Phone Number:");
-        TextField phoneField = new TextField();
+        Label uriLabel = new Label("URI:");
+        TextField uriField = new TextField();
 
         Button submitButton = new Button("Submit");
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (testNames.containsKey(newValue)) {
+                uriField.setText(testNames.get(newValue));
+            }
+        });
+
         submitButton.setOnAction(e -> {
             // Perform validation
             String name = nameField.getText();
-            String phoneNumber = phoneField.getText();
+            String uriStr = uriField.getText();
+            URI uri;
 
             if (name.isEmpty()) {
                 showAlert("Name cannot be blank.");
-            } else if (!isValidPhoneNumber(phoneNumber)) {
-                showAlert("Invalid phone number format.");
+            } else if ((uri = isValidUri(uriStr)) == null) {
+                showAlert("Invalid URI");
             } else {
-                // Successful sign-in, switch to the next scene (you can implement this part later)
-                // For now, we'll just close the application
-//                primaryStage.close();
+                // Successful sign-in
+                State.getInstance().setName(name);
+                State.getInstance().setUri(uri);
                 MainAppController mainAppController = new MainAppController(primaryStage);
 
                 // Initialize the main scene
@@ -89,15 +107,19 @@ public class MobileApp extends Application {
             }
         });
 
-        signInBox.getChildren().addAll(nameLabel, nameField, phoneLabel, phoneField, submitButton);
+        signInBox.getChildren().addAll(nameLabel, nameField, uriLabel,
+                uriField, submitButton);
         return signInBox;
     }
 
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        // Implement your phone number validation logic here
-        // For simplicity, we'll just check if it contains digits and is 10 characters long
-//        return phoneNumber.matches("\\d{10}");
-        return true;
+    private URI isValidUri(String uriStr) {
+        URI ret = null;
+        try {
+            ret = new URI(uriStr);
+        } catch (Exception e) {
+
+        }
+        return ret;
     }
 
     private void showAlert(String message) {

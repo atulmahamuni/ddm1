@@ -1,13 +1,18 @@
 package org.derecalliance.ddm1.state;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 public class State {
+    String name;
+    URI uri;
     ArrayList<Secret> secrets = new ArrayList<>();
     ArrayList<Sharer> sharers = new ArrayList<>();
     String colorBackground = "#e0e0e0";
     String colorPrimary = "#ff0000";
     String colorSecondary = "#00ff00";
+
+    boolean helperStarted = false;
 
     private static final State instance = new State();
 
@@ -42,5 +47,29 @@ public class State {
         } else {
             return colorPrimary;
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    public boolean isHelperStarted() {
+        return helperStarted;
+    }
+
+    public void setHelperStarted(boolean helperStarted) {
+        this.helperStarted = helperStarted;
     }
 }

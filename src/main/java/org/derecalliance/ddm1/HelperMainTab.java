@@ -7,16 +7,25 @@ import javafx.scene.layout.*;
 import org.derecalliance.ddm1.qrcode.QRCode;
 import org.derecalliance.ddm1.state.Secret;
 import org.derecalliance.ddm1.state.State;
+//import org.derecalliance.derec.api.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import com.thebuildingblocks.keypr.sharer.*;
+import com.thebuildingblocks.keypr.helper.*;
+import com.thebuildingblocks.keypr.helper.tools.*;
+import org.derecalliance.derec.api.*;
+
+
 
 public class HelperMainTab extends Tab {
 
     public HelperMainTab() {
         this.setText("Helper");
-
-
+        System.out.println("Helper main for " + State.getInstance().getName() + ", URI: " + State.getInstance().getUri());
+        initHelperMainTab();
         StackPane stackPane = new StackPane();
         BorderPane helperContent = new BorderPane();
         HBox topRow = new HBox(10);
@@ -41,6 +50,24 @@ public class HelperMainTab extends Tab {
 
         stackPane.getChildren().add(helperContent);
         this.setContent(stackPane);
+    }
+
+    public void initHelperMainTab() {
+        if (!State.getInstance().isHelperStarted()) {
+            try {
+                DeRecIdentity myIdentity =
+                        new DeRecIdentity(State.getInstance().getName(), "Contact",
+                                State.getInstance().getUri().toString(), "publicKey");
+                List<DeRecIdentity> list = Collections.singletonList(myIdentity);
+                TestHelperServer helperServer = new TestHelperServer();
+                helperServer.startServer(State.getInstance().getUri().getPort(),
+                        list);
+                State.getInstance().setHelperStarted(true);
+            } catch (Exception e) {
+                System.out.println("Exception in initHelperMainTab");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void createNewSharer(Pane pane) {

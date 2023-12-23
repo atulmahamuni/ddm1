@@ -1,4 +1,10 @@
 module org.derecalliance.ddm1 {
+//    requires com.thebuildingblocks.keypr;
+//    requires com.thebuildingblocks.keypr.helper;
+//    requires com.thebuildingblocks.keypr.helper.tools;
+//    requires org.derecalliance.derec.api;
+//    requires org.derecalliance.derec.api;
+
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -9,6 +15,7 @@ module org.derecalliance.ddm1 {
     requires javafx.swing;
     requires com.google.zxing;
     requires com.google.zxing.javase;
+    requires ch.qos.logback.classic;
 
     opens org.derecalliance.ddm1 to javafx.fxml;
     exports org.derecalliance.ddm1;
